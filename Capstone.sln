@@ -1,12 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capstone.Admin", "Capstone.Admin\Capstone.Admin.csproj", "{6E96C3B7-3139-4C49-B960-B771D15187C8}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33502.453
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Capstone.Admin", "Capstone.Admin\Capstone.Admin.csproj", "{6E96C3B7-3139-4C49-B960-B771D15187C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capstone.Flight", "Capstone.Flight\Capstone.Flight.csproj", "{D7E37E74-C161-4AD2-8ADA-B6499BD9C586}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Capstone.Flight", "Capstone.Flight\Capstone.Flight.csproj", "{D7E37E74-C161-4AD2-8ADA-B6499BD9C586}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capstone.EndUser", "Capstone.EndUser\Capstone.EndUser.csproj", "{A5CB16B5-3097-4B6A-9048-B1439DC28F05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Capstone.EndUser", "Capstone.EndUser\Capstone.EndUser.csproj", "{A5CB16B5-3097-4B6A-9048-B1439DC28F05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capstone.Shared", "Capstone.Shared\Capstone.Shared.csproj", "{1EF25118-4873-4FF7-90FC-F1CA67D6BF26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Capstone.Shared", "Capstone.Shared\Capstone.Shared.csproj", "{1EF25118-4873-4FF7-90FC-F1CA67D6BF26}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Capstone.Gateway", "Capstone.Gateway\Capstone.Gateway.csproj", "{F68A7AD3-AF49-400B-92B1-1E4390EBCF4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +35,12 @@ Global
 		{1EF25118-4873-4FF7-90FC-F1CA67D6BF26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EF25118-4873-4FF7-90FC-F1CA67D6BF26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EF25118-4873-4FF7-90FC-F1CA67D6BF26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F68A7AD3-AF49-400B-92B1-1E4390EBCF4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F68A7AD3-AF49-400B-92B1-1E4390EBCF4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F68A7AD3-AF49-400B-92B1-1E4390EBCF4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F68A7AD3-AF49-400B-92B1-1E4390EBCF4F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
