@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Capstone.Admin.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("admin/[controller]")]
 public class WeatherForecastController : ControllerBase
 {
     private static readonly string[] Summaries = new[]
@@ -25,7 +25,7 @@ public class WeatherForecastController : ControllerBase
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                 TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+                Summary = $"ADMIN-{Summaries[Random.Shared.Next(Summaries.Length)]}"
             })
             .ToArray();
     }
