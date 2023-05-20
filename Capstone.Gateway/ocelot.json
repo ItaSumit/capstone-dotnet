@@ -1,0 +1,44 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:8000"
+  },
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api/v1.0/flight/admin/WeatherForecast",
+      "UpstreamHttpMethod":  ["Get", "Options"],
+      "DownstreamPathTemplate": "/admin/WeatherForecast",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "capstone_admin",
+          "Port": 5255
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1.0/flight/enduser/WeatherForecast",
+      "UpstreamHttpMethod":  ["Get", "Options"],
+      "DownstreamPathTemplate": "/enduser/WeatherForecast",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "capstone_enduser",
+          "Port": 5256
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1.0/flight/flight/WeatherForecast",
+      "UpstreamHttpMethod":  ["Get", "Options"],
+      "DownstreamPathTemplate": "/flight/WeatherForecast",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "capstone_flight",
+          "Port": 5257
+        }
+      ]
+    }
+  ]
+}
+        

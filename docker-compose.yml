@@ -24,6 +24,13 @@ services:
       dockerfile: Capstone.Flight/Dockerfile
     ports:
       - 5257:5257
+  capstone_gateway: 
+    image: capstonegateway
+    build:
+      context: .
+      dockerfile: Capstone.Gateway/Dockerfile
+    ports:
+      - 8000:8000
   capstone_db:
     image: postgres:14.1-alpine
     restart: always

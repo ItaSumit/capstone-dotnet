@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capstone.Flight", "Capstone
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capstone.EndUser", "Capstone.EndUser\Capstone.EndUser.csproj", "{A5CB16B5-3097-4B6A-9048-B1439DC28F05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capstone.Gateway", "Capstone.Gateway\Capstone.Gateway.csproj", "{7B90E208-C76F-46D7-B87F-DF49437B2E13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{A5CB16B5-3097-4B6A-9048-B1439DC28F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5CB16B5-3097-4B6A-9048-B1439DC28F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5CB16B5-3097-4B6A-9048-B1439DC28F05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B90E208-C76F-46D7-B87F-DF49437B2E13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B90E208-C76F-46D7-B87F-DF49437B2E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B90E208-C76F-46D7-B87F-DF49437B2E13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B90E208-C76F-46D7-B87F-DF49437B2E13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
