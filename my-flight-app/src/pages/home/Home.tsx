@@ -22,10 +22,26 @@ export default function Home() {
           </Row>
           <Row className="mb-3">
             <Form.Group as={Col} className="mb-3" id="tripType">
-            <Form.Label> </Form.Label>
+              <Form.Label> </Form.Label>
               <Form.Check as={Col} type="radio" label="One Way" />
+            </Form.Group>
+            <Form.Group as={Col} className="mb-3" id="tripType">
+              <Form.Label> </Form.Label>
               <Form.Check as={Col} type="radio" label="Round Trip" />
             </Form.Group>
+          </Row>
+          <Row className="mb-3">
+            <Form.Group as={Col} controlId="departDate">
+              <Form.Label>Departure Date</Form.Label>
+              <Form.Control type="date" placeholder="Departure date" />
+            </Form.Group>
+
+            <Form.Group as={Col} controlId="return Date">
+              <Form.Label>Return Date</Form.Label>
+              <Form.Control type="date" placeholder="Return date" />
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Meal Choice</Form.Label>
               <Form.Select defaultValue="0">
@@ -33,17 +49,6 @@ export default function Home() {
                 <option id="1">Veg</option>
                 <option id="2">Non-Veg</option>
               </Form.Select>
-            </Form.Group>
-          </Row>
-          <Row className="mb-3">
-            <Form.Group as={Col} controlId="departDate">
-              <Form.Label>Depart from</Form.Label>
-              <Form.Control type="date" placeholder="Departure date" />
-            </Form.Group>
-
-            <Form.Group as={Col} controlId="return Date">
-              <Form.Label>Going to</Form.Label>
-              <Form.Control type="date" placeholder="Return date" />
             </Form.Group>
           </Row>
 
