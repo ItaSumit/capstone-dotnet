@@ -1,0 +1,38 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: '3.4'
+
+services:
+  capstone_admin:
+    image: capstoneadmin
+    build:
+      context: .
+      dockerfile: Capstone.Admin/Dockerfile
+    ports:
+      - 5255:5255
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+  capstone_enduser:
+    image: capstoneenduser
+    build:
+      context: .
+      dockerfile: Capstone.EndUser/Dockerfile
+    ports:
+      - 5256:5256
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+  capstone_flight:
+    image: capstoneflight
+    build:
+      context: .
+      dockerfile: Capstone.Flight/Dockerfile
+    ports:
+      - 5257:5257
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw

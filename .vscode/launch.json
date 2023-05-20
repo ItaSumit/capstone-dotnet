@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Docker .NET Core Launch",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/Capstone.EndUser/Capstone.EndUser.csproj"
+            },
+            "dockerRun": {
+                "ports": [
+                    { "hostPort": 5256, "containerPort": 5256 }
+                ]
+            },
+            "dockerServerReadyAction": {
+                "uriFormat": "%s://localhost:%s/WeatherForecast"
+            }
+        }
+    ]
+}
