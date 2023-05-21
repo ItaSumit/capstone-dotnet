@@ -2,6 +2,7 @@
 
 public class FlightResult
 {
+    public int Id { get; set; }
     public string FlightNumber { get; set; }
 
     public string Airline { get; set; }

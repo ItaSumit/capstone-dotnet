@@ -50,6 +50,7 @@ public class FlightService : IFlightService
         {
             var flightResult = new FlightResult
             {
+                Id = flight.Id,
                 FlightNumber = flight.FlightNumber,
                 Airline = flight.Airline,
                 From = flight.From,
