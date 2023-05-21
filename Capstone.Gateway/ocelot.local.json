@@ -1,0 +1,128 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:8000"
+  },
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api/v1.0/flight/admin/login",
+      "UpstreamHttpMethod": [
+        "Post",
+        "Options"
+      ],
+      "DownstreamPathTemplate": "/admin/api/auth/login",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5255
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1.0/flight/airline/register",
+      "UpstreamHttpMethod": [
+        "Post",
+        "Options"
+      ],
+      "DownstreamPathTemplate": "/admin/api/flight/add-flight",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5255
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1.0/flight/airline/block/{flightId}/{blocked}",
+      "UpstreamHttpMethod": [
+        "Put",
+        "Options"
+      ],
+      "DownstreamPathTemplate": "/admin/api/flight/block-unblock-flight/{flightId}/{blocked}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5255
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1.0/flight/search",
+      "UpstreamHttpMethod": [
+        "Post",
+        "Options"
+      ],
+      "DownstreamPathTemplate": "/user/api/flight/search-fllights",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5256
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1.0/flight/booking",
+      "UpstreamHttpMethod": [
+        "Post",
+        "Options"
+      ],
+      "DownstreamPathTemplate": "/user/api/booking/book-flight",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5256
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1.0/flight/ticket/{pnr}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Options"
+      ],
+      "DownstreamPathTemplate": "/user/api/booking/booking/{pnr}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5256
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1.0/flight/booking/history/{emailId}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Options"
+      ],
+      "DownstreamPathTemplate": "/user/api/booking/history/{emailId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5256
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/v1.0/flight/booking/cancel/{pnr}",
+      "UpstreamHttpMethod": [
+        "Delete",
+        "Options"
+      ],
+      "DownstreamPathTemplate": "/user/api/booking/cancel/{pnr}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5256
+        }
+      ]
+    }
+  ]
+}
+        

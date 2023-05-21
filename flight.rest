@@ -1,0 +1,177 @@
+
+//@gateway=http://localhost:8000/api/v1.0/flight
+@gateway=http://localhost:8000/api/v1.0/flight
+
+@adminRegisterUrl=admin/register
+@adminLoginUrl=admin/login
+@addAirlineUrl=airline/register
+@airlineBlockUnblockUrl=airline/block
+@searchFlightUrl=search
+@bookFlightUrl= booking
+@pnrUrl=ticket
+@emailHistoryUrl=booking/history
+@cancelPnrUrl=booking/cancel
+@flightId= 12
+@block=true
+@pnr=BLR-DEL-OW-21411D9F
+@dateTime = 2023-04-09
+@email=s.a@g.com
+@cancelPnr=BLR-DEL-RT-F77F0C67
+
+@adminToken= eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoic3RyaW5nIiwianRpIjoiZTVkZWEzOWQtZTI5Ny00YjYzLWI4NTgtYmJkODViYTY2MWFmIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy91c2VyZGF0YSI6IjIwZmMwMGY3LWQxNDAtNDk4OC1iMzZhLTI0MmM5NTE3MWEwZiIsImV4cCI6MTY4NDY3MDAzNCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MTk5IiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo1MTk5In0.AX9Vao55g6HonVximZxiNf4gEeWuFM12XZna94pY5H0
+
+//admin register
+###
+POST {{gateway}}/{{adminRegisterUrl}}
+Content-Type: application/json
+
+{
+  "username": "string",
+  "email": "user@example.com",
+  "firstName": "string",
+  "lastName": "string",
+  "fullName": "string",
+  "password": "123456"
+}
+
+//admin login
+###
+POST {{gateway}}/{{adminLoginUrl}}
+Content-Type: application/json
+
+{
+  "username": "string",
+  "password": "123456"
+}
+
+//add airline
+###
+POST {{gateway}}/{{addAirlineUrl}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "flightNumber": "F-0021",
+  "airline": "Vistara",
+  "from": "DEL",
+  "to": "BLR",
+  "startAt": "11:00",
+  "endAt":"12:00",
+  "days": [
+    "Monday", "Tuesday"
+  ],
+  "instrument": "Boeing",
+  "businessClassSeats": 10,
+  "nonBusinessClassSeats": 10,
+  "rows": 5,
+  "cost": 1000,
+  "isVeg": true,
+  "isNonVeg": true
+}
+
+//block or unblock flight
+###
+PUT  {{gateway}}/{{airlineBlockUnblockUrl}}/{{flightId}}/{{block}}
+Authorization: Bearer {{adminToken}}
+
+
+//return trip search flight
+###
+POST {{gateway}}/{{searchFlightUrl}}
+Content-Type: application/json
+
+{
+  "from": "BLR",
+  "to": "DEL",
+  "fromTravelDate": "2023-05-22",
+  "returnTravelDate": "2023-05-23",
+  "tripType": "RoundTrip",
+  "mealType": "Veg"
+}
+
+//one way search flight
+###
+POST {{gateway}}/{{searchFlightUrl}}
+Content-Type: application/json
+
+{
+  "from": "BLR",
+  "to": "DEL",
+  "fromTravelDate": "2023-05-22",
+  "tripType": "OneWay",
+  "mealType": "Veg"
+}
+
+//one book flight
+###
+POST {{gateway}}/{{bookFlightUrl}}
+Content-Type: application/json
+
+{
+  "fromFlightId": 1,
+  "userEmail": "s.a@g.com",
+  "passengers": [
+    {
+      "firstName": "sumit",
+      "lastName": "agrawal",
+      "age": 35,
+      "mealType": "Veg",
+      "seatNumber": 1
+    },
+    {
+      "firstName": "a",
+      "lastName": "b",
+      "age": 30,
+      "mealType": "Veg",
+      "seatNumber": 2
+    }
+  ],
+  "fromTravelDate": "2023-05-22",
+  "tripType": "OneWay"
+}
+
+//round trip book flight
+###
+POST {{gateway}}/{{bookFlightUrl}}
+Content-Type: application/json
+
+{
+  "fromFlightId": 9,
+  "returnFlightId": 10,
+  "userEmail": "s.a@g.com",
+  "passengers": [
+    {
+      "firstName": "sumit",
+      "lastName": "agrawal",
+      "age": 35,
+      "mealType": "Veg",
+      "seatNumber": 1
+    },
+    {
+      "firstName": "a",
+      "lastName": "b",
+      "age": 30,
+      "mealType": "Veg",
+      "seatNumber": 2
+    }
+  ],
+  "fromTravelDate": "2023-05-22",
+  "tripType": "RoundTrip",
+  "returnTravelDate":"2023-05-23"
+}
+
+//pnr detail
+###
+GET {{gateway}}/{{pnrUrl}}/{{pnr}}
+
+//history by email id
+###
+GET {{gateway}}/{{emailHistoryUrl}}/{{email}}
+
+
+//cancel pnr
+###
+DELETE {{gateway}}/{{cancelPnrUrl}}/{{cancelPnr}}
+
+
+

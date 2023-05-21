@@ -65,7 +65,7 @@ public class FlightService : IFlightService
         return flightResults;
     }
 
-    public async Task AddFlight(FlightInput flightInput)
+    public async Task<int> AddFlight(FlightInput flightInput)
     {
         var flight = new Models.Flight
         {
@@ -84,6 +84,8 @@ public class FlightService : IFlightService
 
         _context.Flights.Add(flight);
         await _context.SaveChangesAsync();
+
+        return flight.Id;
     }
 
     public async Task BlockFlight(int flightId, bool isBlocked)

@@ -8,6 +8,6 @@ public interface IFlightService
     Task<List<Models.Flight>> GetAllFlights();
     Task<Models.Flight> GetFlight(Expression<Func<Models.Flight, bool>> filter);
     Task<List<FlightResult>> SearchFlights(FlightSearchCriteria criteria);
-    Task AddFlight(FlightInput flightInput);
+    Task<int> AddFlight(FlightInput flightInput);
     Task BlockFlight(int flightId, bool isBlocked);
 }

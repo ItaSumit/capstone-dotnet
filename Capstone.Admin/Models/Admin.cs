@@ -4,6 +4,6 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Capstone.Admin.Models;
 
-public class Admin : IdentityUser<int>
+public class Admin : IdentityUser
 {
 }

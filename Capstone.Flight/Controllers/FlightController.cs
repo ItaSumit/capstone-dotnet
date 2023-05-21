@@ -5,16 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Capstone.Flight.Controllers;
 
-[Route("api/[controller]")]
+[Route("flight/api/[controller]")]
 [ApiController]
-public class FlightController: ControllerBase
+public class FlightController : ControllerBase
 {
     public FlightController()
     {
     }
-    
+
     [HttpGet]
-    //[Authorize(Policy = "RequireAdmin")]
     public async Task<IActionResult> GetAsync([FromServices] IFlightService flightRepository)
     {
         var flights = await flightRepository.GetAllFlights();
@@ -23,7 +22,8 @@ public class FlightController: ControllerBase
 
     [Route("search")]
     [HttpPost]
-    public async Task<IActionResult> SearchFlight(FlightSearchCriteria criteria, [FromServices] IFlightService flightRepository)
+    public async Task<IActionResult> SearchFlight(FlightSearchCriteria criteria,
+        [FromServices] IFlightService flightRepository)
     {
         var flights = await flightRepository.SearchFlights(criteria);
         return Ok(flights);
@@ -32,14 +32,13 @@ public class FlightController: ControllerBase
 
     [Route("add-flight")]
     [HttpPost]
-    [Authorize(Policy = "RequireAdmin")]
     public async Task<ActionResult> AddFlight(FlightInput flightInput, [FromServices] IFlightService flightRepository)
     {
         var existing = await flightRepository.GetFlight(x => x.FlightNumber == flightInput.FlightNumber);
         if (existing == null)
         {
-            await flightRepository.AddFlight(flightInput);
-            return Ok("Flight saved successfully");
+            var result = await flightRepository.AddFlight(flightInput);
+            return Ok(result);
         }
 
         return Conflict(existing);
@@ -47,19 +46,10 @@ public class FlightController: ControllerBase
 
     [Route("block-unblock-flight/{flightId}/{blocked}")]
     [HttpPut]
-    [Authorize(Policy = "RequireAdmin")]
-    public async Task<ActionResult> BlockUnblockFlight(int flightId, bool blocked, [FromServices] IFlightService flightRepository)
+    public async Task<ActionResult> BlockUnblockFlight(int flightId, bool blocked,
+        [FromServices] IFlightService flightRepository)
     {
         await flightRepository.BlockFlight(flightId, blocked);
-
-        if (blocked)
-        {
-            return Ok("Flight blocked successfully");
-        }
-        else
-        {
-            return Ok("Flight unblocked successfully");
-        }
-
+        return Ok();
     }
 }
