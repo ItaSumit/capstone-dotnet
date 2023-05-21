@@ -8,10 +8,12 @@ namespace Capstone.Flight.Services.Impl;
 public class FlightService : IFlightService
 {
     private readonly FlightDbContext _context;
+    private readonly PricingStrategyCalculator _priceCalculator;
 
-    public FlightService(FlightDbContext context)
+    public FlightService(FlightDbContext context, PricingStrategyCalculator priceCalculator)
     {
         _context = context;
+        _priceCalculator = priceCalculator;
     }
 
     public async Task<List<Flight.Models.Flight>> GetAllFlights()
@@ -48,6 +50,7 @@ public class FlightService : IFlightService
 
         flights.ForEach(flight =>
         {
+            var occupancy = 51f;
             var flightResult = new FlightResult
             {
                 Id = flight.Id,
@@ -59,7 +62,7 @@ public class FlightService : IFlightService
                 MealType = criteria.MealType,
                 Departure = flight.From == criteria.From ? criteria.FromTravelDate.ToDateTime(flight.StartAt) : criteria.ReturnTravelDate.GetValueOrDefault().ToDateTime(flight.StartAt),
                 Arrival = flight.From == criteria.From ? criteria.FromTravelDate.ToDateTime(flight.EndAt) : criteria.ReturnTravelDate.GetValueOrDefault().ToDateTime(flight.EndAt),
-                Cost = flight.Cost
+                Cost = _priceCalculator.Calculate(occupancy, flight.Cost)
             };
             flightResults.Add(flightResult);
         });

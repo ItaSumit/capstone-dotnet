@@ -23,6 +23,9 @@ builder.Services.AddDbContext<FlightDbContext>(
 
 builder.Services.AddScoped<IFlightService, FlightService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<PricingStrategyCalculator>();
+builder.Services.AddScoped<HikedPricingStrategy>();
+builder.Services.AddScoped<NormalPricingStrategy>();
 
 var app = builder.Build();
 

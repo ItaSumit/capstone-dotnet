@@ -1,4 +1,5 @@
 using Capstone.Flight.Models;
+using Capstone.Flight.Services;
 using Capstone.Flight.Services.Impl;
 using Capstone.Shared.Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,9 @@ public class FlightServiceTest
 {
     private FlightDbContext dbContext;
 
+    private PricingStrategyCalculator _calculator =
+        new PricingStrategyCalculator(new HikedPricingStrategy(), new NormalPricingStrategy());
+
     [OneTimeSetUp]
     public void Setup()
     {
@@ -18,7 +22,7 @@ public class FlightServiceTest
     [Test]
     public async Task should_return_all_flights()
     {
-        var service = new FlightService(dbContext);
+        var service = new FlightService(dbContext, _calculator);
 
         var response = await service.GetAllFlights();
 
@@ -28,7 +32,7 @@ public class FlightServiceTest
     [Test]
     public async Task should_return_flight_based_on_filter()
     {
-        var service = new FlightService(dbContext);
+        var service = new FlightService(dbContext, _calculator);
 
         var response = await service.GetFlight(f => f.FlightNumber == "F-001");
 
@@ -38,7 +42,7 @@ public class FlightServiceTest
     [Test]
     public async Task should_return_no_flight_based_on_filter()
     {
-        var service = new FlightService(dbContext);
+        var service = new FlightService(dbContext, _calculator);
 
         var response = await service.GetFlight(f => f.FlightNumber == "F-003");
 
@@ -48,7 +52,7 @@ public class FlightServiceTest
     [Test]
     public async Task should_return_one_flight_for_one_way_search()
     {
-        var service = new FlightService(dbContext);
+        var service = new FlightService(dbContext, _calculator);
         int daysToAddForMonday = (1 - (int)DateTime.Now.DayOfWeek + 7) % 7;
         var nextModay = DateTime.Now.AddDays(daysToAddForMonday);
 
@@ -68,7 +72,7 @@ public class FlightServiceTest
     [Test]
     public async Task should_return_two_flight_for_one_way_search()
     {
-        var service = new FlightService(dbContext);
+        var service = new FlightService(dbContext, _calculator);
         int daysToAddForMonday = (1 - (int)DateTime.Now.DayOfWeek + 7) % 7;
         var nextModay = DateTime.Now.AddDays(daysToAddForMonday);
 
@@ -108,7 +112,7 @@ public class FlightServiceTest
             IsVeg = true,
             IsNonVeg = true,
         };
-        var service = new FlightService(dbContext);
+        var service = new FlightService(dbContext, _calculator);
 
         var id = await service.AddFlight(newFlight);
 
@@ -121,7 +125,7 @@ public class FlightServiceTest
     [Test]
     public async Task should_block_flight()
     {
-        var service = new FlightService(dbContext);
+        var service = new FlightService(dbContext, _calculator);
 
         await service.BlockFlight(1, true);
 
@@ -135,7 +139,7 @@ public class FlightServiceTest
     [Test]
     public async Task should_un_block_flight()
     {
-        var service = new FlightService(dbContext);
+        var service = new FlightService(dbContext, _calculator);
 
         await service.BlockFlight(1, false);
 
