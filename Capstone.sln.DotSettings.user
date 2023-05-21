@@ -1,0 +1,19 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=44a1ceb9_002De790_002D4b7f_002D9bfb_002Df6f31cb5d975/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="should_call_get_all_flights" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::4BAA9F80-A195-4DF3-B133-3E97CDDD5058::net7.0::Capstone.Flight.Test.FlightControllerTest&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::4BAA9F80-A195-4DF3-B133-3E97CDDD5058::net7.0::Capstone.Flight.Test.BookingControllerTest.should_call_get_booking&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::4BAA9F80-A195-4DF3-B133-3E97CDDD5058::net7.0::Capstone.Flight.Test.BookingControllerTest.should_call_get_user_booking&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::4BAA9F80-A195-4DF3-B133-3E97CDDD5058::net7.0::Capstone.Flight.Test.BookingControllerTest.should_call_book_flight&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::4BAA9F80-A195-4DF3-B133-3E97CDDD5058::net7.0::Capstone.Flight.Test.FlightServiceTest.should_return_all_students&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::4BAA9F80-A195-4DF3-B133-3E97CDDD5058::net7.0::Capstone.Flight.Test.FlightServiceTest.should_return_flight_based_on_filter&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::4BAA9F80-A195-4DF3-B133-3E97CDDD5058::net7.0::Capstone.Flight.Test.FlightServiceTest.should_return_no_flight_based_on_filter&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::4BAA9F80-A195-4DF3-B133-3E97CDDD5058::net7.0::Capstone.Flight.Test.FlightServiceTest.should_block_flight&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::4BAA9F80-A195-4DF3-B133-3E97CDDD5058::net7.0::Capstone.Flight.Test.FlightServiceTest.should_un_block_flight&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::4BAA9F80-A195-4DF3-B133-3E97CDDD5058::net7.0::Capstone.Flight.Test.FlightServiceTest.should_add_flight&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::4BAA9F80-A195-4DF3-B133-3E97CDDD5058::net7.0::Capstone.Flight.Test.FlightServiceTest.should_return_one_flight_for_one_way_search&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::4BAA9F80-A195-4DF3-B133-3E97CDDD5058::net7.0::Capstone.Flight.Test.FlightServiceTest.should_return_two_flight_for_one_way_search&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::4BAA9F80-A195-4DF3-B133-3E97CDDD5058::net7.0::Capstone.Flight.Test.FlightServiceTest&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::4BAA9F80-A195-4DF3-B133-3E97CDDD5058::net7.0::Capstone.Flight.Test.BookingControllerTest&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

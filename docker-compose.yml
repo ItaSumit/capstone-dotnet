@@ -10,6 +10,8 @@ services:
       dockerfile: Capstone.Admin/Dockerfile
     ports:
       - 5255:5255
+    depends_on:
+      - capstone_db
   capstone_enduser:
     image: capstoneenduser
     build:
@@ -17,6 +19,8 @@ services:
       dockerfile: Capstone.EndUser/Dockerfile
     ports:
       - 5256:5256
+    depends_on:
+      - capstone_db
   capstone_flight:
     image: capstoneflight
     build:
@@ -24,6 +28,8 @@ services:
       dockerfile: Capstone.Flight/Dockerfile
     ports:
       - 5257:5257
+    depends_on:
+      - capstone_db
   capstone_gateway: 
     image: capstonegateway
     build:
@@ -31,6 +37,11 @@ services:
       dockerfile: Capstone.Gateway/Dockerfile
     ports:
       - 8000:8000
+    depends_on:
+      - capstone_db
+      - capstone_admin
+      - capstone_enduser
+      - capstone_flight
   capstone_db:
     image: postgres:14.1-alpine
     restart: always

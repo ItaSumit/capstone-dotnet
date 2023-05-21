@@ -9,35 +9,37 @@ namespace Capstone.Flight.Controllers;
 [ApiController]
 public class FlightController : ControllerBase
 {
-    public FlightController()
+    private readonly IFlightService _flightRepository;
+
+    public FlightController(IFlightService flightRepository)
     {
+        _flightRepository = flightRepository;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAsync([FromServices] IFlightService flightRepository)
+    public async Task<IActionResult> GetAsync()
     {
-        var flights = await flightRepository.GetAllFlights();
+        var flights = await _flightRepository.GetAllFlights();
         return Ok(flights);
     }
 
     [Route("search")]
     [HttpPost]
-    public async Task<IActionResult> SearchFlight(FlightSearchCriteria criteria,
-        [FromServices] IFlightService flightRepository)
+    public async Task<IActionResult> SearchFlight(FlightSearchCriteria criteria)
     {
-        var flights = await flightRepository.SearchFlights(criteria);
+        var flights = await _flightRepository.SearchFlights(criteria);
         return Ok(flights);
     }
 
 
     [Route("add-flight")]
     [HttpPost]
-    public async Task<ActionResult> AddFlight(FlightInput flightInput, [FromServices] IFlightService flightRepository)
+    public async Task<ActionResult> AddFlight(FlightInput flightInput)
     {
-        var existing = await flightRepository.GetFlight(x => x.FlightNumber == flightInput.FlightNumber);
+        var existing = await _flightRepository.GetFlight(x => x.FlightNumber == flightInput.FlightNumber);
         if (existing == null)
         {
-            var result = await flightRepository.AddFlight(flightInput);
+            var result = await _flightRepository.AddFlight(flightInput);
             return Ok(result);
         }
 
@@ -46,10 +48,9 @@ public class FlightController : ControllerBase
 
     [Route("block-unblock-flight/{flightId}/{blocked}")]
     [HttpPut]
-    public async Task<ActionResult> BlockUnblockFlight(int flightId, bool blocked,
-        [FromServices] IFlightService flightRepository)
+    public async Task<ActionResult> BlockUnblockFlight(int flightId, bool blocked)
     {
-        await flightRepository.BlockFlight(flightId, blocked);
+        await _flightRepository.BlockFlight(flightId, blocked);
         return Ok();
     }
 }
