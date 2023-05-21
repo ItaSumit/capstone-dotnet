@@ -11,10 +11,19 @@ namespace Capstone.Flight.Controllers;
 [Produces("application/json")]
 public class BookingController : ControllerBase
 {
-    [HttpGet]
-    public ActionResult GetBookings([FromServices] IBookingService bookingService)
+    private readonly IBookingService _bookingRepository;
+    private readonly IFlightService _flightRepository;
+
+    public BookingController(IBookingService bookingRepository, IFlightService flightRepository)
     {
-        var bookings = bookingService.GetBookings();
+        _bookingRepository = bookingRepository;
+        _flightRepository = flightRepository;
+    }
+    
+    [HttpGet]
+    public ActionResult GetBookings()
+    {
+        var bookings = _bookingRepository.GetBookings();
         List<BookingOutput> bookingsOutput = bookings.Select(b =>
             new BookingOutput
             {
@@ -47,9 +56,9 @@ public class BookingController : ControllerBase
 
     [HttpGet]
     [Route("history/{emailId}")]
-    public ActionResult GetUserBooking(string emailId, [FromServices] IBookingService bookingService)
+    public ActionResult GetUserBooking(string emailId)
     {
-        var bookings = bookingService.GetBookings().Where(b => b.EmailId == emailId);
+        var bookings = _bookingRepository.GetBookings().Where(b => b.EmailId == emailId);
         List<BookingOutput> bookingsOutput = bookings.Select(b =>
             new BookingOutput
             {
@@ -80,9 +89,9 @@ public class BookingController : ControllerBase
 
     [HttpGet]
     [Route("booking/{pnr}")]
-    public async Task<IActionResult> GetPNRBookings(string pnr, [FromServices] IBookingService bookingService)
+    public async Task<IActionResult> GetPNRBookings(string pnr)
     {
-        var bookings = bookingService.GetBookings().Where(b => b.PNR == pnr);
+        var bookings = _bookingRepository.GetBookings().Where(b => b.PNR == pnr);
         List<BookingOutput> bookingsOutput = bookings.Select(b =>
             new BookingOutput
             {
@@ -113,17 +122,16 @@ public class BookingController : ControllerBase
 
     [HttpPost]
     [Route("book-flight")]
-    public async Task<ActionResult> BookFlight(BookingInput bookingInput,
-        [FromServices] IFlightService flightService, [FromServices] IBookingService bookingService)
+    public async Task<ActionResult> BookFlight(BookingInput bookingInput)
     {
         var errors = new List<string>();
-        var fromFlight = await flightService.GetFlight(x => x.Id == bookingInput.FromFlightId);
+        var fromFlight = await _flightRepository.GetFlight(x => x.Id == bookingInput.FromFlightId);
         if (fromFlight == null || fromFlight.IsBlocked)
             errors.Add("From flight not avaialble or flight is blocked.");
 
         if (bookingInput.TripType == TripType.RoundTrip)
         {
-            var returnFlight = await flightService.GetFlight(x => x.Id == bookingInput.ReturnFlightId);
+            var returnFlight = await _flightRepository.GetFlight(x => x.Id == bookingInput.ReturnFlightId);
 
             if (returnFlight == null || returnFlight.IsBlocked)
             {
@@ -136,7 +144,7 @@ public class BookingController : ControllerBase
             return BadRequest(errors);
         }
 
-        var pnr = await bookingService.BookFlight(bookingInput);
+        var pnr = await _bookingRepository.BookFlight(bookingInput);
         return Ok(pnr);
     }
 
