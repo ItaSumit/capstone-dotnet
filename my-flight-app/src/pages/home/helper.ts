@@ -1,29 +1,39 @@
+import { PassengerInfo } from "../../types";
+
 export interface FlightSearch {
   from: string;
   to: string;
   fromTravelDate: string;
   returnTravelDate?: string;
-  tripType: number;
-  mealType: number;
+  tripType: string;
+  mealType: string;
 }
 
 
 const MealStringMap: Record<string, number> = {};
 MealStringMap['Select meal option'] = 0;
 MealStringMap['Veg'] = 1;
-MealStringMap['Non-Veg'] = 2;
+MealStringMap['NonVeg'] = 2;
 
 const MealNumberMap: Record<number, string> = {};
 MealNumberMap[9] = 'Select meal option';
 MealNumberMap[1] = 'Veg';
-MealNumberMap[2] = 'Non-Veg';
+MealNumberMap[2] = 'NonVeg';
 
 const defaultSearch: FlightSearch = {
-  tripType: 1,
+  tripType: "OneWay",
   from: "BLR",
-  to: "PAT",
+  to: "DEL",
   fromTravelDate: new Date().toISOString().split('T')[0],
-  mealType: 0,
+  mealType: "Select meal option",
 };
 
-export { defaultSearch, MealNumberMap, MealStringMap };
+const defaultPassenger: PassengerInfo = {
+  firstName: '',
+  lastName: '',
+  age: 25,
+  mealType: 'Veg',
+  seatNumber: 1
+}
+
+export { defaultSearch, MealNumberMap, MealStringMap, defaultPassenger };

@@ -1,48 +1,94 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import { FlightResult } from "../../types";
+import { FlightResult, PassengerInfo } from "../../types";
 import FlightView from "./FlightView";
-import { FlightSearch, defaultSearch, MealNumberMap, MealStringMap } from "./helper";
+import {
+  FlightSearch,
+  defaultSearch,
+  MealNumberMap,
+  MealStringMap,
+  defaultPassenger,
+} from "./helper";
+import { bookflight, flightSearch } from "../../service/userservice";
+import { useHistory } from "react-router-dom";
 
 export default function Home() {
+  const history = useHistory();
   const [searchCriteria, setSearchCriteria] =
     useState<FlightSearch>(defaultSearch);
   const [searchResult, setSearchResult] = useState<FlightResult[]>([]);
   const [selectedOutwardFlight, setOutwardFlight] = useState(-1);
   const [selectedReturnFlight, setReturnFlight] = useState(-1);
-  const [outwardFlights, setOutwardFlights] = useState<FlightResult[]>([
-    {
-      airline: "INDIGO",
-      from: "BLR",
-      to: "PAT",
-      departure: "15/10/2023",
-      arrival: "15/10/2023",
-      instrument: "",
-      mealType: "",
-      cost: 5000,
-      flightNumber: "AB-101",
-    },
-    {
-      airline: "SPICEJET",
-      from: "BLR",
-      to: "PAT",
-      departure: "15/10/2023",
-      arrival: "15/10/2023",
-      instrument: "",
-      mealType: "",
-      cost: 5000,
-      flightNumber: "SJ-202",
-    },
-  ]);
+  const [totalCost, setTotalCost] = useState(0);
+  const [email, setEmail] = useState("");
+  const [outwardFlights, setOutwardFlights] = useState<FlightResult[]>([]);
   const [returnFlights, setReturnFlights] = useState<FlightResult[]>([]);
+  const [passenger, setPassenger] = useState<PassengerInfo>(defaultPassenger);
+  const [passengers, setPassengers] = useState<PassengerInfo[]>([]);
 
   function handleSearch(e: any) {
     e.preventDefault();
     console.log({ searchCriteria });
+    flightSearch(searchCriteria)
+      .then((flights) => {
+        setOutwardFlights(
+          flights.filter((f) => f.from === searchCriteria.from)
+        );
+        setReturnFlights(flights.filter((f) => f.from === searchCriteria.to));
+
+        if (flights.length === 0) {
+          alert("No flights found");
+        }
+      })
+      .catch((error) => alert("Errored: \r\n\r\n" + JSON.stringify(error)));
   }
+
+  function handlePassengerSubmit(e: any) {
+    e.preventDefault();
+    setPassengers((prev) => [
+      ...prev,
+      { ...passenger, seatNumber: prev.length + 1 },
+    ]);
+    setPassenger({ ...defaultPassenger });
+  }
+
+  function handleFlightBooking() {
+    bookflight({
+      fromFlightId: outwardFlights[selectedOutwardFlight].id,
+      fromTravelDate: searchCriteria.fromTravelDate,
+      passengers: passengers,
+      tripType: searchCriteria.tripType,
+      userEmail: email,
+      returnFlightId:
+        searchCriteria.tripType === "RoundTrip"
+          ? returnFlights[selectedReturnFlight].id
+          : undefined,
+      returnTravelDate:
+        searchCriteria.tripType === "RoundTrip"
+          ? searchCriteria.returnTravelDate
+          : undefined,
+    }).then((pnr) => {
+      history.push(`/booking/history/${pnr}`);
+    });
+  }
+
+  useEffect(() => {
+    let outwardCost = 0;
+    let returnCost = 0;
+
+    if (selectedOutwardFlight > -1) {
+      outwardCost = outwardFlights[selectedOutwardFlight].cost;
+    }
+
+    if (selectedReturnFlight > -1) {
+      returnCost = returnFlights[selectedReturnFlight].cost;
+    }
+
+    setTotalCost(outwardCost + returnCost);
+  }, [selectedOutwardFlight, selectedReturnFlight]);
 
   return (
     <>
@@ -81,10 +127,13 @@ export default function Home() {
               <input
                 type="radio"
                 className="form-check-input"
-                checked={searchCriteria.tripType === 1}
+                checked={searchCriteria.tripType === "OneWay"}
                 onChange={(e) => {
                   if (e.target.checked) {
-                    setSearchCriteria({ ...searchCriteria, tripType: 1 });
+                    setSearchCriteria({
+                      ...searchCriteria,
+                      tripType: "OneWay",
+                    });
                   }
                 }}
               />{" "}
@@ -94,10 +143,13 @@ export default function Home() {
               <input
                 type="radio"
                 className="form-check-input"
-                checked={searchCriteria.tripType === 2}
+                checked={searchCriteria.tripType === "RoundTrip"}
                 onChange={(e) => {
                   if (e.target.checked) {
-                    setSearchCriteria({ ...searchCriteria, tripType: 2 });
+                    setSearchCriteria({
+                      ...searchCriteria,
+                      tripType: "RoundTrip",
+                    });
                   }
                 }}
               />{" "}
@@ -121,7 +173,7 @@ export default function Home() {
               />
             </Form.Group>
 
-            {searchCriteria.tripType === 2 && (
+            {searchCriteria.tripType === "RoundTrip" && (
               <Form.Group as={Col} controlId="return Date">
                 <Form.Label>Return Date</Form.Label>
                 <Form.Control
@@ -142,18 +194,18 @@ export default function Home() {
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Meal Choice</Form.Label>
               <Form.Select
-                value={MealNumberMap[searchCriteria.mealType]}
+                value={searchCriteria.mealType}
                 onChange={(e) => {
                   console.log({ val: e.target.value });
                   setSearchCriteria({
                     ...searchCriteria,
-                    mealType: MealStringMap[e.target.value],
+                    mealType: e.target.value,
                   });
                 }}
               >
                 <option>Select meal option</option>
                 <option>Veg</option>
-                <option>Non-Veg</option>
+                <option>NonVeg</option>
               </Form.Select>
             </Form.Group>
           </Row>
@@ -163,58 +215,186 @@ export default function Home() {
           </Button>
         </Form>
       </div>
-      <div className="p-3 mb-2 rounded-3">
-        <div className="row">
-          <div className="col">
-            <h3 className="fw-bold">Onward Journey</h3>
-            {outwardFlights.map((f, idx) => (
-              <FlightView
-                flight={f}
-                selected={idx === selectedOutwardFlight}
-                onSelect={(_) => setOutwardFlight(idx)}
-              />
-            ))}
-            <div>
-              <Form.Group as={Col} controlId="formGridState">
-                <Form.Label>Meal Choice</Form.Label>
-                <Form.Select defaultValue={MealNumberMap[0]}>
-                  <option>Select meal option</option>
-                  <option>Veg</option>
-                  <option>Non-Veg</option>
-                </Form.Select>
-              </Form.Group>
+      {outwardFlights.length > 0 && (
+        <>
+          <div className="p-3 mb-2 rounded-3">
+            <div className="row">
+              <div className="col">
+                <h3 className="fw-bold">Onward Journey</h3>
+                {outwardFlights.map((f, idx) => (
+                  <FlightView
+                    flight={f}
+                    selected={idx === selectedOutwardFlight}
+                    onSelect={(_) => setOutwardFlight(idx)}
+                  />
+                ))}
+                <div>
+                  <Form.Group as={Col} controlId="formGridState">
+                    <Form.Label>Meal Choice</Form.Label>
+                    <Form.Select value={searchCriteria.mealType}>
+                      <option>Select meal option</option>
+                      <option>Veg</option>
+                      <option>NonVeg</option>
+                    </Form.Select>
+                  </Form.Group>
+                </div>
+              </div>
+              {searchCriteria.tripType === "RoundTrip" && (
+                <div className="col">
+                  <h3 className="fw-bold">Return Journey</h3>
+                  {returnFlights.map((f, idx) => (
+                    <FlightView
+                      flight={f}
+                      selected={idx === selectedReturnFlight}
+                      onSelect={(_) => setReturnFlight(idx)}
+                    />
+                  ))}
+                  <div>
+                    <Form.Group as={Col} controlId="formGridState">
+                      <Form.Label>Meal Choice</Form.Label>
+                      <Form.Select value={searchCriteria.mealType}>
+                        <option id="0">Select meal option</option>
+                        <option id="1">Veg</option>
+                        <option id="2">NonVeg</option>
+                      </Form.Select>
+                    </Form.Group>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-          <div className="col">
-            <h3 className="fw-bold">Return Journey</h3>
-            {returnFlights.map((f, idx) => (
-              <FlightView
-                flight={f}
-                selected={idx === selectedReturnFlight}
-                onSelect={(_) => setReturnFlight(idx)}
-              />
-            ))}
-            <div>
-              <Form.Group as={Col} controlId="formGridState">
-                <Form.Label>Meal Choice</Form.Label>
-                <Form.Select defaultValue="0">
-                  <option id="0">Select meal option</option>
-                  <option id="1">Veg</option>
-                  <option id="2">Non-Veg</option>
-                </Form.Select>
+
+          <div className="bg-light p-3 mb-3">
+            <h3>Contact Information</h3>
+            <div className="row">
+              <Form.Group as={Col} controlId="formGridEmail">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </Form.Group>
             </div>
+
+            <h3>Passenger Information</h3>
+            <div className="row">
+              <div className="col">
+                <strong>Firstname</strong>
+              </div>
+              <div className="col">
+                <strong>Lastname</strong>
+              </div>
+              <div className="col">
+                <strong>Age</strong>
+              </div>
+              <div className="col">
+                <strong>Meal</strong>
+              </div>
+            </div>
+
+            {passengers.map((p) => (
+              <div className="row">
+                <div className="col">{p.firstName}</div>
+                <div className="col">{p.lastName}</div>
+                <div className="col">{p.age}</div>
+                <div className="col">{p.mealType}</div>
+              </div>
+            ))}
+
+            <h4 className="mt-4">Add new passenger</h4>
+            <Form autoComplete="off" onSubmit={handlePassengerSubmit}>
+              <Row className="mb-1">
+                <Form.Group as={Col} controlId="formGridEmail">
+                  <Form.Label>First name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Firstname"
+                    required
+                    value={passenger.firstName}
+                    onChange={(e) =>
+                      setPassenger({
+                        ...passenger,
+                        firstName: e.target.value,
+                      })
+                    }
+                  />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridEmail">
+                  <Form.Label>Last name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Lastname"
+                    required
+                    value={passenger.lastName}
+                    onChange={(e) =>
+                      setPassenger({
+                        ...passenger,
+                        lastName: e.target.value,
+                      })
+                    }
+                  />
+                </Form.Group>
+                <Form.Group as={Col} controlId="formGridEmail">
+                  <Form.Label>Age</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Age"
+                    required
+                    value={passenger.age}
+                    onChange={(e) =>
+                      setPassenger({
+                        ...passenger,
+                        age: parseFloat(e.target.value),
+                      })
+                    }
+                  />
+                </Form.Group>
+                <Form.Group as={Col} controlId="formGridState">
+                  <Form.Label>Meal Choice</Form.Label>
+                  <Form.Select
+                    value={passenger.mealType}
+                    onChange={(e) => {
+                      setPassenger({
+                        ...passenger,
+                        mealType: e.target.value,
+                      });
+                    }}
+                  >
+                    <option>Select meal option</option>
+                    <option>Veg</option>
+                    <option>NonVeg</option>
+                  </Form.Select>
+                </Form.Group>
+                <Form.Group as={Col} controlId="formGridState">
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    style={{ marginTop: "30px" }}
+                  >
+                    +
+                  </Button>
+                </Form.Group>
+              </Row>
+            </Form>
           </div>
-        </div>
-      </div>
-      <div className="row bg-light p-3">
-        <div className="col">Total Price: Rs. 10,000</div>
-        <div className="col text-end">
-          <Button variant="primary" type="button">
-            Continue Booking
-          </Button>
-        </div>
-      </div>
+          <div className="row bg-light p-3">
+            <div className="col">Total Price: Rs. {totalCost}</div>
+            <div className="col text-end">
+              <Button
+                variant="primary"
+                type="button"
+                onClick={handleFlightBooking}
+              >
+                Confirm Booking
+              </Button>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }
