@@ -56,6 +56,19 @@
 			"netCore": {
 				"appProject": "${workspaceFolder}/Capstone.EndUser/Capstone.EndUser.csproj"
 			}
+		},
+		{
+			"type": "docker-build",
+			"label": "docker-build",
+			"platform": "node",
+			"dockerBuild": {
+				"dockerfile": "${workspaceFolder}/my-flight-app/Dockerfile",
+				"context": "${workspaceFolder}/my-flight-app",
+				"pull": true
+			},
+			"node": {
+				"package": "${workspaceFolder}/my-flight-app/package.json"
+			}
 		}
 	]
 }

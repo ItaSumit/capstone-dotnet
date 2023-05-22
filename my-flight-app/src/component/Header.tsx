@@ -1,50 +1,80 @@
+import { useEffect, useState } from "react";
+import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
+import { getToken } from "../service/adminService";
+
 export default function Header() {
+  const [token, setToken] = useState<string | null>(null);
+  const history = useHistory();
+
+  useEffect(() => {
+    const token = getToken();
+    setToken(token);
+  }, []);
+
   return (
-    <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-      <div className="container-fluid">
-        <a className="navbar-brand" href="#">
-          Top navbar
-        </a>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarCollapse"
-          aria-controls="navbarCollapse"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarCollapse">
-          <ul className="navbar-nav me-auto mb-2 mb-md-0">
-            <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
-                Home
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">
-                Link
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link disabled">Disabled</a>
-            </li>
-          </ul>
-          <form className="d-flex" role="search">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button className="btn btn-outline-success" type="submit">
-              Search
-            </button>
-          </form>
+    <div>
+      <nav className="navbar navbar-expand navbar-dark bg-dark px-3">
+        <Link to="/" className="navbar-brand">
+          Capstone Flight
+        </Link>
+        <div className="navbar-nav mr-auto">
+          <li className="nav-item">
+            <Link to={"/"} className="nav-link">
+              Plan Travel
+            </Link>
+          </li>
         </div>
-      </div>
-    </nav>
+        {token ? (
+          <>
+            <div className="navbar-nav mr-auto">
+              <li className="nav-item">
+                <Link to={"/booking/history"} className="nav-link">
+                  Booking History
+                </Link>
+              </li>
+            </div>
+            <div className="navbar-nav mr-auto">
+              <li className="nav-item">
+                <Link to={"/admin/add-airline"} className="nav-link">
+                  Add airline
+                </Link>
+              </li>
+            </div>
+            <div className="navbar-nav ml-auto" style={{ marginLeft: "auto" }}>
+              <li className="nav-item">
+                <Link to={"/"} className="nav-link">
+                  Welcome Admin
+                </Link>
+              </li>
+
+              <li className="nav-item">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    history.push("/");
+                    window.location.reload();
+                  }}
+                >
+                  Log out
+                </button>
+              </li>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="navbar-nav mr-auto">
+              <li className="nav-item">
+                <Link to={"/adminLogin"} className="nav-link">
+                  Admin Login
+                </Link>
+              </li>
+            </div>
+          </>
+        )}
+      </nav>
+    </div>
   );
 }

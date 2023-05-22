@@ -10,11 +10,25 @@
             },
             "dockerRun": {
                 "ports": [
-                    { "hostPort": 5256, "containerPort": 5256 }
+                    {
+                        "hostPort": 5256,
+                        "containerPort": 5256
+                    }
                 ]
             },
             "dockerServerReadyAction": {
                 "uriFormat": "%s://localhost:%s/WeatherForecast"
+            }
+        },
+        {
+            "name": "Docker Node.js Launch",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run: debug",
+            "platform": "node",
+            "node": {
+                "package": "${workspaceFolder}/my-flight-app/package.json",
+                "localRoot": "${workspaceFolder}/my-flight-app"
             }
         }
     ]

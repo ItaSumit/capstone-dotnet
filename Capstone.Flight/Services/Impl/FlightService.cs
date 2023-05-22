@@ -43,14 +43,19 @@ public class FlightService : IFlightService
             (criteria.MealType == MealType.Veg && f.IsVeg || criteria.MealType == MealType.NonVeg && f.IsNonVeg)
             && (f.From == criteria.From && f.To == criteria.To && f.Days.Contains(fromTravelDay)
                 || (criteria.TripType == TripType.RoundTrip && returnTravelDay != ""
-                                                            && f.From == criteria.To && f.To == criteria.From && f.Days.Contains(returnTravelDay)))).ToListAsync();
+                                                            && f.From == criteria.To && f.To == criteria.From &&
+                                                            f.Days.Contains(returnTravelDay)))).ToListAsync();
 
 
         var flightResults = new List<FlightResult>();
 
         flights.ForEach(flight =>
         {
-            var occupancy = 51f;
+            var flightBookings = _context.Bookings.Where(b => b.Flight.FlightNumber == flight.FlightNumber)
+                .Include(b => b.Passengers).ToList();
+            var occupancy = flightBookings.Sum(b => b.Passengers.Count);
+
+            var occupancyPercent = occupancy * 100 / (flight.BusinessClassSeats + flight.NonBusinessClassSeats);
             var flightResult = new FlightResult
             {
                 Id = flight.Id,
@@ -60,9 +65,13 @@ public class FlightService : IFlightService
                 To = flight.To,
                 Instrument = flight.Instrument,
                 MealType = criteria.MealType,
-                Departure = flight.From == criteria.From ? criteria.FromTravelDate.ToDateTime(flight.StartAt) : criteria.ReturnTravelDate.GetValueOrDefault().ToDateTime(flight.StartAt),
-                Arrival = flight.From == criteria.From ? criteria.FromTravelDate.ToDateTime(flight.EndAt) : criteria.ReturnTravelDate.GetValueOrDefault().ToDateTime(flight.EndAt),
-                Cost = _priceCalculator.Calculate(occupancy, flight.Cost)
+                Departure = flight.From == criteria.From
+                    ? criteria.FromTravelDate.ToDateTime(flight.StartAt)
+                    : criteria.ReturnTravelDate.GetValueOrDefault().ToDateTime(flight.StartAt),
+                Arrival = flight.From == criteria.From
+                    ? criteria.FromTravelDate.ToDateTime(flight.EndAt)
+                    : criteria.ReturnTravelDate.GetValueOrDefault().ToDateTime(flight.EndAt),
+                Cost = _priceCalculator.Calculate(occupancyPercent, flight.Cost)
             };
             flightResults.Add(flightResult);
         });
@@ -84,6 +93,9 @@ public class FlightService : IFlightService
             IsVeg = flightInput.IsVeg,
             Cost = flightInput.Cost,
             Days = string.Join(";", flightInput.Days),
+            NonBusinessClassSeats = flightInput.NonBusinessClassSeats,
+            BusinessClassSeats = flightInput.BusinessClassSeats,
+            Rows = flightInput.Rows
         };
 
         _context.Flights.Add(flight);

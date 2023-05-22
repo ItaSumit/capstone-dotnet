@@ -4,12 +4,13 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { FlightInput, defaultAddFlight } from "./helper";
 import { useState } from "react";
+import { addAirline } from "../../../service/adminService";
 
 const DAYS = [
   "Sunday",
   "Monday",
   "Tuesday",
-  "Wednusday",
+  "Wednesday",
   "Thursday",
   "Friday",
   "Saturday",
@@ -21,6 +22,9 @@ export default function AddAirline() {
   function handleSubmit(e: any) {
     e.preventDefault();
     console.log({ airline });
+    addAirline(airline).then((data) => {
+      alert(`Airline added ${data}`);
+    });
   }
 
   return (
@@ -116,12 +120,28 @@ export default function AddAirline() {
               }
             />
           </Form.Group>
-          <Form.Group as={Col} className="mb-1" id="tripType">
+          <Form.Group as={Col} className="mb-1" id="mealType">
             <Form.Label> </Form.Label>
-            <Form.Check as={Col} type="radio" label="Veg" />
-            <Form.Check as={Col} type="radio" label="Non Veg" />
+            <Form.Check>
+              <Form.Check.Input
+                checked={airline.isVeg}
+                onChange={(e) => {
+                  setAirline({ ...airline, isVeg: e.target.checked });
+                }}
+              />
+              <Form.Check.Label>Veg</Form.Check.Label>
+            </Form.Check>
+            <Form.Check>
+              <Form.Check.Input
+                checked={airline.isNonVeg}
+                onChange={(e) => {
+                  setAirline({ ...airline, isNonVeg: e.target.checked });
+                }}
+              />
+              <Form.Check.Label>Non Veg</Form.Check.Label>
+            </Form.Check>
           </Form.Group>
-          <Form.Group as={Col} controlId="departDate">
+          <Form.Group as={Col} controlId="businessClassSeats">
             <Form.Label>Business Class Seats</Form.Label>
             <Form.Control
               type="number"
@@ -136,7 +156,7 @@ export default function AddAirline() {
               }
             />
           </Form.Group>
-          <Form.Group as={Col} controlId="departDate">
+          <Form.Group as={Col} controlId="nonBusinessClassSeats">
             <Form.Label>Economy Seats</Form.Label>
             <Form.Control
               type="number"
@@ -151,7 +171,7 @@ export default function AddAirline() {
               }
             />
           </Form.Group>
-          <Form.Group as={Col} controlId="departDate">
+          <Form.Group as={Col} controlId="rows">
             <Form.Label>Rows</Form.Label>
             <Form.Control
               type="number"

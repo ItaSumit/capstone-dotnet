@@ -5,7 +5,8 @@ public class PricingStrategyCalculator
     private readonly HikedPricingStrategy _hikedPricingStrategy;
     private readonly NormalPricingStrategy _normalPricingStrategy;
 
-    public PricingStrategyCalculator(HikedPricingStrategy hikedPricingStrategy, NormalPricingStrategy normalPricingStrategy)
+    public PricingStrategyCalculator(HikedPricingStrategy hikedPricingStrategy,
+        NormalPricingStrategy normalPricingStrategy)
     {
         _hikedPricingStrategy = hikedPricingStrategy;
         _normalPricingStrategy = normalPricingStrategy;
@@ -22,5 +23,4 @@ public class PricingStrategyCalculator
             return _normalPricingStrategy.getPrice(basePrice);
         }
     }
-    
 }
